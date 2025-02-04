@@ -8,9 +8,22 @@ export default {
   ],
   theme: {
     extend: {
+      gridTemplateColumns: {
+        '13': 'repeat(13, minmax(0, 1fr))',
+      },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        green: {
+          400: '#25fe71',
+          500: '#00f396',
+          600: '#1e820e',
+        },
+      },
+    },
+    keyframes: {
+      shimmer: {
+        '100%': {
+          transform: 'translateX(100%)',
+        },
       },
     },
   },
