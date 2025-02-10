@@ -6,7 +6,7 @@ import TodoWrapper from "./todos";
 export default async function ColumnWrapper() {
     // const columnList = getListOfColumns() etc...
     return (
-        <div className="grid grid-cols-5 md:grid-cols-2 sm:grid-cols-1 rounded-lg gap-5">
+        <div className="grid grid-cols-5 md:grid-cols-3 sm:grid-cols-1 rounded-lg gap-5">
             {/* Tähän tarvitaan map-funktio columnien listaamiseen. */ }
             <Column id="1" title="Prepare"/>
             <Column id="2" title="Work started"/>
@@ -28,11 +28,11 @@ export function Column({
     // Search for all of the todos inside this column.
 
     return (
-        <div className="bg-gray-200 rounded-lg center">
+        <div className="bg-gray-200 rounded-lg justify-center">
             {/* Kolumnin otsikko */ }
             {/* Nappi kolumnin poistamiseen */ }
             {/* Napit kolumnin siirtämiseen */ }
-            {/* Tähän tarvitaan map-funktio todojen listaamiseen */ }
+            
             <h2 className="text-md font-semibold text-gray-800">{title}</h2>
             <TodoWrapper />
         </div>
