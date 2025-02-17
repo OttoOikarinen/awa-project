@@ -1,6 +1,6 @@
 // I have used Next.js nextjs-dasboard tutorial as a base for this file. 
 'use client'
-import { Button } from "./button"
+import { Button } from "./buttons"
 
 import {
     AtSymbolIcon,
