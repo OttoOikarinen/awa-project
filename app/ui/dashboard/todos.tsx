@@ -1,10 +1,6 @@
 // Tähän pitää importtaa joku sql kutsu, joka sitten tekee tarvittavan määrän todoita. 
-// Pitää importtaa myös actionit noille napeille.
-import {
-    CheckIcon,
-    PencilIcon,
-    TrashIcon,
-} from '@heroicons/react/24/outline';
+
+import { MarkTodoDoneButton, UpdateTodoButton, DeleteTodoButton } from '../buttons';
 
 export default async function TodoWrapper() {
     // const todoList = getTodos() etc...
@@ -39,16 +35,9 @@ export function Todo({
 
             
             <div className="flex gap-2 mt-4">
-                <button className="px-1 py-1 text-sm rounded-lg hover:bg-green-500 border-2 border-gray-400">
-                    <CheckIcon className="w-5 h-5 "/>
-                </button>
-                <button className="px-1 py-1 text-sm rounded-lg hover:bg-yellow-300 border-2 border-gray-400">
-                    <PencilIcon className="w-5 h-5"/>
-                </button>
-                
-                <button className="px-1 py-1 text-sm rounded-lg hover:bg-red-500 border-2 border-gray-400">
-                    <TrashIcon className="w-5 h-5"/>
-                </button>
+                <MarkTodoDoneButton id="1234"/>
+                <UpdateTodoButton id="1234"/>
+                <DeleteTodoButton id="1234"/>
             </div>
         </div>
     )
