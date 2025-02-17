@@ -17,5 +17,11 @@ export type Todo = {
     user_id: string,
     column_id: string,
     task: string,
-    todo_index: number
+    todo_index: number,
+    done: boolean
+}
+
+export type ColumnField = {
+    id: string,
+    title: string
 }
