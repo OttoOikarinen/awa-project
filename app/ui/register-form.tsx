@@ -8,21 +8,15 @@ import {
     KeyIcon,
     ExclamationCircleIcon,
   } from '@heroicons/react/24/outline';
-  import { ArrowRightIcon } from '@heroicons/react/20/solid';
+import { ArrowRightIcon } from '@heroicons/react/20/solid';
+import { registerUser } from '@/app/lib/actions'
+import { useActionState } from "react";
 
 export default function RegisterForm() {
-    // Modify these when you actually have the functionality!!!
-    const callbackUrl = "localhost:3000/dashboard"
-    const errorMessage = "This is the error message."
-    const isPending = false
-
-    const formAction = () => {
-        console.log("Clicked.")
-    }
-    // Until this!!!
+  const [state, action, isPending] = useActionState(registerUser, undefined)
 
     return (
-        <form action={formAction} className="space-y-3">
+        <form action={action} className="space-y-3">
           <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
             <h1 className="mb-3 text-2xl">
               Fill the information to register.
@@ -47,6 +41,7 @@ export default function RegisterForm() {
                       <UserIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                     </div>
                   </div>
+                  {state?.errors?.name && <p>{state.errors.name}</p>}
                 <div>
                   <label
                     className="mb-3 mt-5 block text-xs font-medium text-gray-900"
@@ -66,6 +61,7 @@ export default function RegisterForm() {
                     <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                   </div>
                 </div>
+                {state?.errors?.email && <p>{state.errors.email}</p>}
                 <div className="mt-4">
                   <label
                     className="mb-3 mt-5 block text-xs font-medium text-gray-900"
@@ -87,7 +83,7 @@ export default function RegisterForm() {
                   </div>
                 </div>
             </div>
-            <input type="hidden" name="redirectTo" value={callbackUrl} />
+            <input type="hidden" name="redirectTo" value="/login" />
             <Button className="mt-4 w-full" aria-disabled={isPending}>
               Register <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
             </Button>
@@ -96,11 +92,15 @@ export default function RegisterForm() {
               aria-live="polite"
               aria-atomic="true"
             >
-              {errorMessage && (
-                <>
-                  <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-                  <p className="text-sm text-red-500">{errorMessage}</p>
-                </>
+              {state?.errors?.password && (
+                <div>
+                  <p>Password must:</p>
+                    <ul>
+                      {state.errors.password.map((error) => (
+                      <li key={error}>- {error}</li>
+                      ))}
+                    </ul>
+                </div>
               )}
             </div>
           </div>

@@ -1,29 +1,14 @@
 // All of the actions the buttons call will be here!
 'use server';
-import { z } from 'zod';
+import { SignupFormSchema, State, FormState, FormSchema } from './definitions';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import postgres from 'postgres';
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import bcrypt from 'bcrypt';
+import { v4 } from 'uuid'
+import { createSession } from './session';
 
-const FormSchema = z.object({
-    id: z.string(),
-    columnId: z.string({
-      invalid_type_error: 'Please select a column.',
-    }),
-    task: z.string({
-        invalid_type_error: 'Please insert task.',
-      }),
-    date: z.string(),
-  });
-
-export type State = {
-    errors?: {
-      columnId?: string[];
-      task?: string[];
-    } | null;
-    message?: string | null;
-  };
+const sql = postgres(process.env.DATABASE_URL!);
 
 const CreateTodo = FormSchema.omit({ id: true, date: true });
 export async function createTodo(prevState: State, formData: FormData) {
@@ -68,8 +53,41 @@ export async function createTodo(prevState: State, formData: FormData) {
     redirect('/dashboard/');
 }
 
-export async function registerUser() {
-    console.log("Registering user user.")
+export async function registerUser(state: FormState, formData: FormData) {
+    console.log("Registering user.")
+
+    const validatedFields = SignupFormSchema.safeParse({
+      name: formData.get('name'),
+      email: formData.get('email'),
+      password: formData.get('password'),
+    })
+
+    if (!validatedFields.success) {
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+      }
+    }
+
+    const { name, email, password } = validatedFields.data
+    const hashedPassword = await bcrypt.hash(password, 10)
+    const userID = v4()
+    console.log(`Trying to create new user ${name} with email ${email} and password ${password}.`)
+    console.log(`UserID: ${userID}`)
+    try {
+      await sql`
+      INSERT INTO users (id, name, email, password)
+      VALUES (${userID}, ${name}, ${email}, ${hashedPassword})
+      `;
+      console.log("Created new user.")
+    } catch (error) {
+      console.log("Failed to create new user.")
+      console.log(error)
+      return {
+        message: 'Database Error: failed to create new user.'
+      }
+    }
+    createSession(userID)
+    redirect('/dashboard')
 }
 
 export async function authenticate() {
