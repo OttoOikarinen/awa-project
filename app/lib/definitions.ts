@@ -25,7 +25,8 @@ export type Todo = {
 
 export type ColumnField = {
     id: string,
-    title: string
+    column_name: string,
+    column_index: number
 }
 
 export const SignupFormSchema = z.object({
@@ -98,3 +99,16 @@ export type LoginFormState =
       message?: string
     }
   | undefined | null;
+
+export const ColumnFormSchema = z.object({
+  column_name: z.string({
+    invalid_type_error: 'Please insert name for column.',
+  }),
+});
+
+export type ColumnState = {
+  errors?: {
+    column_name?: string[];
+  } | null;
+  message?: string | null;
+};

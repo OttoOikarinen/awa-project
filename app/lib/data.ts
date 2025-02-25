@@ -3,14 +3,16 @@ import { ColumnField, User } from "./definitions";
 import postgres from "postgres";
 const sql = postgres(process.env.DATABASE_URL!);
 
-export async function fetchColumns() {
+export async function fetchColumns(user_id: string) {
     try {
       const columns = await sql<ColumnField[]>`
         SELECT
           id,
-          column_name
+          column_name,
+          column_index
         FROM columns
-        ORDER BY name ASC
+        WHERE user_id=${user_id}
+        ORDER BY column_index ASC
       `;
   
       return columns;

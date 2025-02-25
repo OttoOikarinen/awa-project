@@ -2,21 +2,31 @@
 // I've used https://nextjs.org/docs/app/building-your-application/authentication heavily as a source for this file. 
 
 'use server';
-import { SignupFormSchema, State, FormState, FormSchema, LoginFormSchema, LoginFormState } from './definitions';
+import { SignupFormSchema, State, FormState, FormSchema, LoginFormSchema, LoginFormState, ColumnFormSchema, ColumnState } from './definitions';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import postgres from 'postgres';
 import bcrypt from 'bcrypt';
 import { v4 } from 'uuid'
-import { createSession, deleteSession } from './session';
+import { createSession, deleteSession, getUserFromCookie } from './session';
 import { getUser } from './data';
 
 const sql = postgres(process.env.DATABASE_URL!);
 
 const CreateTodo = FormSchema.omit({ id: true, date: true });
 export async function createTodo(prevState: State, formData: FormData) {
-    // Here you still have to get user id!!
-    const userId = "JARkko"
+    const email = await getUserFromCookie();
+    if (email == null) {
+      revalidatePath('/dashboard/');
+      redirect('/dashboard/');
+    }
+    const user = await getUser(email)
+    if (!user) {
+      return {
+        message: "Couldn't find user."
+      }
+    }
+    
     const todo_index = 1
     
     
@@ -36,21 +46,22 @@ export async function createTodo(prevState: State, formData: FormData) {
    
     // Prepare data for insertion into the database
     const { columnId, task } = validatedFields.data;
-    const date = new Date().toISOString().split('T')[0];
-   
+    const id = v4()
     // Insert data into the database
+    console.log(`Creating a new todo. id:${id}, userid: ${user.id}, task: ${task}, index: ${todo_index}  `)
     try {
       await sql`
-        INSERT INTO todos (user_id, column_id, task, todo_index, done)
-        VALUES (${userId}, ${columnId}, ${task}, ${todo_index}, false)
+        INSERT INTO todos (id, user_id, column_id, task, todo_index, done)
+        VALUES ( ${id} ,${user.id}, ${columnId}, ${task}, ${todo_index}, false)
       `;
     } catch (error) {
+      console.log(error)
       // If a database error occurs, return a more specific error.
       return {
         message: 'Database Error: Failed to Create todo.',
       };
     }
-   
+    console.log("Created todo.")
     // Revalidate the cache for the dashboard page and redirect the user.
     revalidatePath('/dashboard/');
     redirect('/dashboard/');
@@ -127,8 +138,55 @@ export async function deleteUser() {
     console.log("Delete user.")
 }
 
-export async function createColumn() {
-    console.log("Creating new column.")
+export async function createColumn(prevState: ColumnState, formData: FormData) {
+  const email = await getUserFromCookie();
+  if (email == null) {
+    revalidatePath('/dashboard/');
+    redirect('/dashboard/');
+  }
+  const user = await getUser(email)
+  if (!user) {
+    return {
+      message: "Couldn't find user."
+    }
+  }
+  
+  const column_index = 0  
+  
+  // Validate form using Zod
+  const validatedFields = ColumnFormSchema.safeParse({
+    column_name: formData.get('column_name'),
+  });
+ 
+  // If form validation fails, return errors early. Otherwise, continue.
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Create Column.',
+    };
+  }
+ 
+  // Prepare data for insertion into the database
+  const { column_name } = validatedFields.data;
+  const id = v4()
+  console.log(`Creating a new column. id:${id}, userid: ${user.id}, name: ${column_name}, index: ${column_index}  `)
+  // Insert data into the database
+  try {
+    await sql`
+      INSERT INTO columns (id, user_id, column_name, column_index)
+      VALUES ( ${id}, ${user.id}, ${column_name}, ${column_index})
+    `;
+  } catch (error) {
+    // If a database error occurs, return a more specific error.
+    console.log(error)
+    return {
+      message: 'Database Error: Failed to Create column.',
+    };
+  }
+ 
+  // Revalidate the cache for the dashboard page and redirect the user.
+  revalidatePath('/dashboard');
+  redirect('/dashboard');
 }
 
 export async function modifyColumn() {

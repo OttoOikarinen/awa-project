@@ -51,9 +51,9 @@ export async function getUserFromCookie() {
   try {
     const cookie = (await cookies()).get('session')?.value
     const session = await decrypt(cookie)
-    const userId = session?.userId;
-    console.log("Getting user from cookie.")
-    return userId;
+    const email: any = session?.email;
+    console.log("Getting email from cookie.")
+    return email;
   }
   catch (error) {
     console.log("Couldn't find user from session.")

@@ -6,7 +6,8 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/buttons';
-import { createTodo, State } from '@/app/lib/actions';
+import { createTodo } from '@/app/lib/actions';
+import { State } from '@/app/lib/definitions';
 import { useActionState } from 'react';
 
 export default function Form({ columns }: { columns: ColumnField[] }) {
@@ -33,7 +34,7 @@ export default function Form({ columns }: { columns: ColumnField[] }) {
               </option>
               {columns.map((column) => (
                 <option key={column.id} value={column.id}>
-                  {column.title}
+                  {column.column_name}
                 </option>
               ))}
             </select>
@@ -69,7 +70,7 @@ export default function Form({ columns }: { columns: ColumnField[] }) {
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
-          href="/dashboard/"
+          href="/dashboard"
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
           Cancel
