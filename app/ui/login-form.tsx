@@ -8,23 +8,17 @@ import {
     ExclamationCircleIcon,
   } from '@heroicons/react/24/outline';
   import { ArrowRightIcon } from '@heroicons/react/20/solid';
+  import { useActionState } from "react";
+  import { loginUser } from "../lib/actions";
 
 export default function LoginForm() {
-    // Modify these when you actually have the functionality!!!
-    const callbackUrl = "localhost:3000/dashboard"
-    const errorMessage = "This is the error message."
-    const isPending = false
-
-    const formAction = () => {
-        console.log("Clicked.")
-    }
-    // Until this!!!
+    const [state, action, isPending] = useActionState(loginUser, undefined)
 
     return (
-        <form action={formAction} className="space-y-3">
+        <form action={action} className="space-y-3">
           <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
             <h1 className="mb-3 text-2xl">
-              Please log in to continue.
+              Please login to continue.
             </h1>
             <div className="w-full">
               <div>
@@ -67,7 +61,7 @@ export default function LoginForm() {
                 </div>
               </div>
             </div>
-            <input type="hidden" name="redirectTo" value={callbackUrl} />
+            <input type="hidden" name="redirectTo" value="/login" />
             <Button className="mt-4 w-full" aria-disabled={isPending}>
               Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
             </Button>
@@ -76,12 +70,6 @@ export default function LoginForm() {
               aria-live="polite"
               aria-atomic="true"
             >
-              {errorMessage && (
-                <>
-                  <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-                  <p className="text-sm text-red-500">{errorMessage}</p>
-                </>
-              )}
             </div>
           </div>
         </form>

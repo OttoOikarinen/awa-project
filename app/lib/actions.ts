@@ -1,12 +1,15 @@
 // All of the actions the buttons call will be here!
+// I've used https://nextjs.org/docs/app/building-your-application/authentication heavily as a source for this file. 
+
 'use server';
-import { SignupFormSchema, State, FormState, FormSchema } from './definitions';
+import { SignupFormSchema, State, FormState, FormSchema, LoginFormSchema, LoginFormState } from './definitions';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import postgres from 'postgres';
 import bcrypt from 'bcrypt';
 import { v4 } from 'uuid'
-import { createSession } from './session';
+import { createSession, deleteSession } from './session';
+import { getUser } from './data';
 
 const sql = postgres(process.env.DATABASE_URL!);
 
@@ -86,12 +89,38 @@ export async function registerUser(state: FormState, formData: FormData) {
         message: 'Database Error: failed to create new user.'
       }
     }
-    createSession(userID)
+    createSession(userID, email)
     redirect('/dashboard')
 }
 
-export async function authenticate() {
-    console.log("Authenticating.")
+export async function logout() {
+  deleteSession()
+  redirect('/login')
+}
+
+export async function loginUser(state: LoginFormState, formData: FormData) {
+  console.log("Authenticating.")
+  const validatedFields = LoginFormSchema.safeParse({
+    email: formData.get('email'),
+    password: formData.get('password'),
+  })
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    }
+  }
+  console.log("Form inputs were validated succesfully.")
+  const { email, password } = validatedFields.data;
+  const user = await getUser(email);
+  if (!user) return null;
+  console.log("In actions/loginUser. Found user, comparing passwords...")
+  const passwordsMatch = await bcrypt.compare(password, user.password);
+  if (passwordsMatch) {
+    console.log("Passwords match! Redirecting...")
+    createSession(user.id, user.email);
+    redirect('/dashboard');
+  }
 }
 
 export async function deleteUser() {

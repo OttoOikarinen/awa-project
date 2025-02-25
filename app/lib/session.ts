@@ -1,3 +1,5 @@
+// I've used https://nextjs.org/docs/app/building-your-application/authentication heavily as a source for this file. 
+
 import 'server-only'
 import { SignJWT, jwtVerify } from 'jose'
 import { SessionPayload } from '@/app/lib/definitions'
@@ -25,17 +27,36 @@ export async function decrypt(session: string | undefined = '') {
   }
 }
 
-export async function createSession(userId: string) {
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-    const isAdmin = false
-    const session = await encrypt({ userId, expiresAt, isAdmin })
-    const cookieStore = await cookies()
-   
-    cookieStore.set('session', session, {
-      httpOnly: true,
-      secure: true,
-      expires: expiresAt,
-      sameSite: 'lax',
-      path: '/',
-    })
+export async function createSession(userId: string, email: string) {
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+  const isAdmin = false
+  const session = await encrypt({ userId, expiresAt, isAdmin, email })
+  const cookieStore = await cookies()
+  
+  cookieStore.set('session', session, {
+    httpOnly: true,
+    secure: true,
+    expires: expiresAt,
+    sameSite: 'lax',
+    path: '/',
+  })
+}
+
+export async function deleteSession() {
+  const cookieStore = await cookies()
+  cookieStore.delete('session')
+}
+
+export async function getUserFromCookie() {
+  try {
+    const cookie = (await cookies()).get('session')?.value
+    const session = await decrypt(cookie)
+    const userId = session?.userId;
+    console.log("Getting user from cookie.")
+    return userId;
   }
+  catch (error) {
+    console.log("Couldn't find user from session.")
+    return null
+  }
+}
