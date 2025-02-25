@@ -37,9 +37,9 @@ export function Todo({
 
             
             <div className="flex gap-2 mt-4">
-                <MarkTodoDoneButton id="1234"/>
-                <UpdateTodoButton id="1234"/>
-                <DeleteTodoButton id="1234"/>
+                <MarkTodoDoneButton id={id}/>
+                <UpdateTodoButton id={id}/>
+                <DeleteTodoButton id={id}/>
             </div>
         </div>
     )

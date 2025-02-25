@@ -195,6 +195,12 @@ export async function modifyColumn() {
 
 export async function deleteColumn(id: string) {
     console.log("Deleting column.")
+    try {
+      await sql`DELETE FROM columns WHERE id=${id}`;
+      revalidatePath('/dashboard')
+    } catch (error) {
+      console.log(error)
+    }   
 }
 
 export async function moveColumnUp() {
@@ -207,6 +213,12 @@ export async function moveColumnDown() {
 
 export async function deleteTodo(id: string) {
     console.log("Delete todo.")
+    try {
+      await sql`DELETE FROM todos WHERE id=${id}`;
+      revalidatePath('/dashboard')
+    } catch (error) {
+      console.log(error)
+    }   
 }
 
 export async function modifyTodo() {
@@ -223,4 +235,10 @@ export async function moveTodoDown() {
 
 export async function markTodoDone(id: string) {
     console.log("Mark todo done!")
+    try {
+      await sql`UPDATE todos SET done = true WHERE id = ${id}`
+      revalidatePath('/dashboard');
+    } catch (error) {
+      console.log(error);
+    }
 }
