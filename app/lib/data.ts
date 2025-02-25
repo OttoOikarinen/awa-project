@@ -1,5 +1,5 @@
 // Here will be all of the database calls.
-import { ColumnField, User } from "./definitions";
+import { ColumnField, Todo, User } from "./definitions";
 import postgres from "postgres";
 const sql = postgres(process.env.DATABASE_URL!);
 
@@ -20,6 +20,29 @@ export async function fetchColumns(user_id: string) {
       console.error('Database Error:', err);
       throw new Error('Failed to fetch all columns.');
     }
+}
+
+export async function fetchTodos(column_id: string) {
+  try {
+    const todos = await sql<Todo[]>`
+      SELECT
+        id,
+        user_id,
+        column_id,
+        task,
+        todo_index,
+        done
+      FROM todos
+      WHERE (column_id=${column_id}
+      AND done=false)
+      ORDER BY todo_index ASC
+    `;
+
+    return todos;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all columns.');
+  }
 }
 
 export async function getUser(email: string): Promise<User | undefined> {

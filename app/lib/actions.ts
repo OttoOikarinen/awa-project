@@ -151,7 +151,7 @@ export async function createColumn(prevState: ColumnState, formData: FormData) {
     }
   }
   
-  const column_index = 0  
+  const column_index = 1  
   
   // Validate form using Zod
   const validatedFields = ColumnFormSchema.safeParse({

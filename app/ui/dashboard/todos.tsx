@@ -1,23 +1,25 @@
 // Tähän pitää importtaa joku sql kutsu, joka sitten tekee tarvittavan määrän todoita. 
 
 import { MarkTodoDoneButton, UpdateTodoButton, DeleteTodoButton } from '../buttons';
+import { fetchTodos } from '@/app/lib/data';
 
-export default async function TodoWrapper() {
-    // const todoList = getTodos() etc...
-    {/* Tähän tarvitaan map-funktio todojen listaamiseen */ }
-    const Todos = [
-        { id: 1, title: "Buy Groceries" },
-        { id: 2, title: "Study React"},
-        { id: 3, title: "Workout"},
-        { id: 4, title: "Read a Book"},
-        { id: 5, title: "Meeting at 3 PM"},
-    ]
+export default async function TodoWrapper({
+        column_id,
+    }: {
+        column_id: string
+    }) {
+    const todos = await fetchTodos(column_id);
+    
     return (
         <div className=" bg-gray-100">
-            {/* Tähän tarvitaan map-funktio todojen listaamiseen. */ }
-            <Todo id="1" task="Pese pyykit, tämä on tosi vaikeeta ja tarvitsee paljon apua."/>
-            <Todo id="2" task="Koodaa todo-appi"/>
-            <Todo id="3" task="Soita saksofonia"/>
+            {/* Map-funktio todojen listaamiseen. */ }
+            {todos.map((todo) => (
+                <Todo
+                    key={todo.id} // Unique key for each column
+                    id={todo.id}
+                    task={todo.task}
+                />
+            ))}
         </div>
     );
 };
