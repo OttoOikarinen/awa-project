@@ -1,5 +1,6 @@
 // Here will be all of the database calls.
-import { ColumnField, Todo, User } from "./definitions";
+import errorMap from "zod/locales/en.js";
+import { Column, ColumnField, Todo, User } from "./definitions";
 import postgres from "postgres";
 const sql = postgres(process.env.DATABASE_URL!);
 
@@ -20,6 +21,23 @@ export async function fetchColumns(user_id: string) {
       console.error('Database Error:', err);
       throw new Error('Failed to fetch all columns.');
     }
+}
+
+export async function fetchSingleColumn(column_id: string) {
+  try {
+    const column = await sql<Column[]>`
+    SELECT 
+      id,
+      user_id,
+      column_name,
+      column_index
+    FROM columns 
+    WHERE id = ${column_id}
+    `;
+    return column[0]
+  } catch(error) {
+    console.log(error)
+  }
 }
 
 export async function fetchTodos(column_id: string) {
@@ -45,6 +63,25 @@ export async function fetchTodos(column_id: string) {
   }
 }
 
+export async function fetchSingleTodo(todo_id: string) {
+  try {
+    const todo = await sql<Todo[]>`
+    SELECT 
+      id,
+      user_id,
+      column_id,
+      task,
+      todo_index,
+      done
+    FROM todos 
+    WHERE id = ${todo_id}
+    `;
+    return todo[0]
+  } catch(error) {
+    console.log(error)
+  }
+}
+
 export async function getUser(email: string): Promise<User | undefined> {
   console.log("Getting user.")
   try {
@@ -56,4 +93,30 @@ export async function getUser(email: string): Promise<User | undefined> {
     console.error('Failed to fetch user:', error);
     throw new Error('Failed to fetch user.');
   }
+}
+
+export async function changeColumnIndex(column_id: string, new_index: number) {
+  console.log("Changing column index.")
+  try {
+    await sql`
+    UPDATE columns
+    SET column_index = ${new_index}
+    WHERE id = ${column_id}`;
+    return true
+  } catch (error) {
+    console.log(error)
+  };
+}
+
+export async function changeTodoIndex(todo_id: string, new_index: number) {
+  console.log("Changing todo index.")
+  try {
+    await sql`
+    UPDATE todos
+    SET todo_index = ${new_index}
+    WHERE id = ${todo_id}`;
+    return true
+  } catch (error) {
+    console.log(error)
+  };
 }

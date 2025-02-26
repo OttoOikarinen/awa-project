@@ -1,6 +1,6 @@
 // Tähän pitää importtaa joku sql kutsu, joka sitten hakee kolumnit tälle käyttäjälle. 
 import TodoWrapper from "./todos";
-import { UpdateColumnButton, DeleteColumnButton  } from "../buttons";
+import { UpdateColumnButton, DeleteColumnButton, MoveColumnDownButton, MoveColumnUpButton  } from "../buttons";
 import { fetchColumns } from "@/app/lib/data";
 import { getUserFromCookie } from "@/app/lib/session";
 import { revalidatePath } from "next/cache";
@@ -60,8 +60,8 @@ export function Column({
 
             {/* Buttons Container */}
             <div className="flex space-x-2">
-                {/*<MoveColumnUpButton id={id}/>
-                <MoveColumnDownButton id={id}/>*/}
+                <MoveColumnUpButton id={id}/>
+                <MoveColumnDownButton id={id}/>
                 <UpdateColumnButton id={id}/>
                 <DeleteColumnButton id={id}/>
             </div>

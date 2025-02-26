@@ -1,8 +1,8 @@
 // I have used Next.js nextjs-dashboard tutorial as a strong base for this file. 
 import clsx from 'clsx';
-import { PencilIcon, PlusIcon, TrashIcon, CheckIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, PlusIcon, TrashIcon, CheckIcon, ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { deleteColumn, deleteTodo, markTodoDone } from '@/app/lib/actions'
+import { deleteColumn, deleteTodo, markTodoDone, moveColumnDown, moveColumnUp, moveTodoDown, moveTodoUp } from '@/app/lib/actions'
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
@@ -104,6 +104,66 @@ export function MarkTodoDoneButton({ id }: { id: string }) {
         <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
           <span className="sr-only">Mark todo done</span>
           <CheckIcon className="w-5" />
+        </button>
+      </form>
+    </>
+  );
+}
+
+export async function MoveColumnDownButton({id}: {id: string}){
+  const moveColumnDownWithID = moveColumnDown.bind(null, id);
+  return (
+    <>
+      <form action={moveColumnDownWithID}>
+        <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
+          <span className="sr-only">Move columm down</span>
+          <ArrowUpIcon className="w-5" />
+        </button>
+      </form>
+    </>
+  );
+
+
+}
+
+export async function MoveColumnUpButton({id}: {id: string}){
+  const moveColumnUpWithID = moveColumnUp.bind(null, id);
+  return (
+    <>
+      <form action={moveColumnUpWithID}>
+        <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
+          <span className="sr-only">Move column up</span>
+          <ArrowDownIcon className="w-5" />
+        </button>
+      </form>
+    </>
+  );
+}
+
+export async function MoveTodoDownButton({todo_id, column_id}: {todo_id: string; column_id: string;}){
+  const moveTodoDownWithID = moveTodoDown.bind(null, todo_id, column_id);
+  return (
+    <>
+      <form action={moveTodoDownWithID}>
+        <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
+          <span className="sr-only">Move todo down</span>
+          <ArrowUpIcon className="w-5" />
+        </button>
+      </form>
+    </>
+  );
+
+
+}
+
+export async function MoveTodoUpButton({todo_id, column_id }: {todo_id: string; column_id: string;}){
+  const moveTodoUpWithID = moveTodoUp.bind(null, todo_id, column_id);
+  return (
+    <>
+      <form action={moveTodoUpWithID}>
+        <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
+          <span className="sr-only">Move todo up</span>
+          <ArrowDownIcon className="w-5" />
         </button>
       </form>
     </>
