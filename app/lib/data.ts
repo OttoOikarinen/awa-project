@@ -1,5 +1,4 @@
 // Here will be all of the database calls.
-import errorMap from "zod/locales/en.js";
 import { Column, ColumnField, Todo, User } from "./definitions";
 import postgres from "postgres";
 const sql = postgres(process.env.DATABASE_URL!);
@@ -15,7 +14,6 @@ export async function fetchColumns(user_id: string) {
         WHERE user_id=${user_id}
         ORDER BY column_index ASC
       `;
-  
       return columns;
     } catch (err) {
       console.error('Database Error:', err);
@@ -75,6 +73,7 @@ export async function fetchSingleTodo(todo_id: string) {
       done
     FROM todos 
     WHERE id = ${todo_id}
+    AND done=false
     `;
     return todo[0]
   } catch(error) {
@@ -83,11 +82,8 @@ export async function fetchSingleTodo(todo_id: string) {
 }
 
 export async function getUser(email: string): Promise<User | undefined> {
-  console.log("Getting user.")
   try {
     const user = await sql<User[]>`SELECT * FROM users WHERE email=${email}`;
-    console.log("Got user.")
-    console.log(user)
     return user[0];
   } catch (error) {
     console.error('Failed to fetch user:', error);
@@ -114,9 +110,26 @@ export async function changeTodoIndex(todo_id: string, new_index: number) {
     await sql`
     UPDATE todos
     SET todo_index = ${new_index}
-    WHERE id = ${todo_id}`;
+    WHERE id = ${todo_id}
+    AND done = false`;
     return true
   } catch (error) {
     console.log(error)
   };
+}
+
+export async function deleteColumnFromDatabase(column_id: string) {
+  try {
+    await sql`DELETE FROM columns WHERE id=${column_id}`;
+  } catch (error) {
+    console.log(error)
+  }   
+}
+
+export async function deleteTodoFromDatabase(todo_id: string) {
+  try {
+    await sql`DELETE FROM todos WHERE id=${todo_id}`;
+  } catch (error) {
+    console.log(error)
+  } 
 }

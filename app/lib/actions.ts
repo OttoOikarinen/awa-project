@@ -9,7 +9,7 @@ import postgres from 'postgres';
 import bcrypt from 'bcrypt';
 import { v4 } from 'uuid'
 import { createSession, deleteSession, getUserFromCookie } from './session';
-import { fetchColumns, fetchTodos, getUser, fetchSingleColumn, changeColumnIndex, fetchSingleTodo, changeTodoIndex } from './data';
+import { fetchColumns, fetchTodos, getUser, fetchSingleColumn, changeColumnIndex, fetchSingleTodo, changeTodoIndex, deleteColumnFromDatabase, deleteTodoFromDatabase, } from './data';
 
 const sql = postgres(process.env.DATABASE_URL!);
 
@@ -109,7 +109,7 @@ export async function registerUser(state: FormState, formData: FormData) {
 
 export async function logout() {
   deleteSession()
-  redirect('/login')
+  redirect('/')
 }
 
 export async function loginUser(state: LoginFormState, formData: FormData) {
@@ -214,13 +214,19 @@ export async function deleteColumn(column_id: string) {
   if (!this_column) {
     return
   }
+  console.log(`Array lenght = ${lenghtOfArray}`)
+  if (this_column.column_index + 1 < lenghtOfArray) {
+    console.log(`Column index now ${this_column.column_index}`)
+    var i  = this_column.column_index + 1
+    while (i < lenghtOfArray) {
 
-  try {
-    await sql`DELETE FROM columns WHERE id=${column_id}`;
-    revalidatePath('/dashboard')
-  } catch (error) {
-    console.log(error)
-  }   
+      await changeColumnIndex(all_columns[i].id, (all_columns[i].column_index - 1))
+      i = i + 1;
+    }
+  }
+
+  await deleteColumnFromDatabase(column_id)
+  revalidatePath('/dashboard')
 }
 
 export async function moveColumnUp(column_id: string) {
@@ -286,14 +292,28 @@ export async function moveColumnDown(column_id: string) {
   }
 }
 
-export async function deleteTodo(id: string) {
-    console.log("Delete todo.")
-    try {
-      await sql`DELETE FROM todos WHERE id=${id}`;
-      revalidatePath('/dashboard')
-    } catch (error) {
-      console.log(error)
-    }   
+export async function deleteTodo(todo_id: string, column_id: string) {
+  console.log("Delete todo.")
+  const this_todo = await fetchSingleTodo(todo_id);
+  const all_todos = await fetchTodos(column_id);
+  const lenghtOfArray = all_todos.length
+
+  if (!this_todo) {
+    return
+  }
+  console.log(`Array lenght = ${lenghtOfArray}`)
+  if (this_todo.todo_index + 1 < lenghtOfArray) {
+    console.log(`Todo index now ${this_todo.todo_index}`)
+    var i  = this_todo.todo_index + 1
+    while (i < lenghtOfArray) {
+
+      await changeTodoIndex(all_todos[i].id, (all_todos[i].todo_index - 1))
+      i = i + 1;
+    }
+  }
+
+  await deleteTodoFromDatabase(todo_id)
+  revalidatePath('/dashboard')
 }
 
 export async function modifyTodo() {
@@ -349,14 +369,4 @@ export async function moveTodoDown(todo_id: string, column_id: string) {
 
     revalidatePath('/dashboard')
   }
-}
-
-export async function markTodoDone(id: string) {
-    console.log("Mark todo done!")
-    try {
-      await sql`UPDATE todos SET done = true AND todo_index=0 WHERE id = ${id}`
-      revalidatePath('/dashboard');
-    } catch (error) {
-      console.log(error);
-    }
 }

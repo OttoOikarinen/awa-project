@@ -10,7 +10,6 @@ const publicRoutes = ['/login', '/register', '/']
  
 export default async function middleware(req: NextRequest) {
   // 2. Check if the current route is protected or public
-  console.log("In middleware at the moment.")
   const path = req.nextUrl.pathname
   const isProtectedRoute = protectedRoutes.includes(path)
   const isPublicRoute = publicRoutes.includes(path)

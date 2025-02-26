@@ -52,7 +52,6 @@ export async function getUserFromCookie() {
     const cookie = (await cookies()).get('session')?.value
     const session = await decrypt(cookie)
     const email: any = session?.email;
-    console.log("Getting email from cookie.")
     return email;
   }
   catch (error) {

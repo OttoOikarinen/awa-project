@@ -1,6 +1,4 @@
-// Tähän pitää importtaa joku sql kutsu, joka sitten tekee tarvittavan määrän todoita. 
-
-import { MarkTodoDoneButton, UpdateTodoButton, DeleteTodoButton, MoveTodoDownButton, MoveTodoUpButton } from '../buttons';
+import { UpdateTodoButton, DeleteTodoButton, MoveTodoDownButton, MoveTodoUpButton } from '../buttons';
 import { fetchTodos } from '@/app/lib/data';
 
 export default async function TodoWrapper({
@@ -42,9 +40,8 @@ export function Todo({
             <div className="flex gap-2 mt-4">
                 <MoveTodoUpButton todo_id={id} column_id={column_id}/>
                 <MoveTodoDownButton todo_id={id} column_id={column_id}/>
-                <MarkTodoDoneButton id={id}/>
                 <UpdateTodoButton id={id}/>
-                <DeleteTodoButton id={id}/>
+                <DeleteTodoButton todo_id={id} column_id={column_id}/>
             </div>
         </div>
     )
