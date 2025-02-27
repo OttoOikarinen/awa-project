@@ -353,7 +353,39 @@ export async function deleteTodo(todo_id: string, column_id: string) {
 }
 
 export async function updateTodo(todo: Todo, prevState: State, formData: FormData) {
-    console.log("Updating todo.")
+  console.log("Updating todo.")
+
+  // Validate form using Zod
+  const validatedFields = CreateTodo.safeParse({
+    columnId: formData.get('columnId'),
+    task: formData.get('task'),
+  });
+   
+  // If form validation fails, return errors early. Otherwise, continue.
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Create Todo.',
+    };
+  }
+   
+  // Prepare data for insertion into the database
+  const { columnId, task } = validatedFields.data;
+  
+  // Insert data into the database
+  try {
+    await sql`UPDATE todos SET task=${task}, column_id=${columnId} WHERE id=${todo.id}`;
+  } catch (error) {
+    console.log(error)
+    // If a database error occurs, return a more specific error.
+    return {
+      message: 'Database Error: Failed to Create todo.',
+    };
+  }
+
+  // Revalidate the cache for the dashboard page and redirect the user.
+  revalidatePath('/dashboard');
+  redirect('/dashboard');
 }
 
 export async function moveTodoUp(todo_id: string, column_id: string) {

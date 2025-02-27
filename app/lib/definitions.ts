@@ -69,12 +69,12 @@ export const FormSchema = z.object({
     });
     
 export type State = {
-    errors?: {
-      columnId?: string[];
-      task?: string[];
-    } | null;
-    message?: string | null;
-  };
+  errors?: {
+    columnId?: string[];
+    task?: string[];
+  } | null;
+  message?: string | null;
+};
 
 export type SessionPayload = {
     userId: string,

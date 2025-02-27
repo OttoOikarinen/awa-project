@@ -1,18 +1,23 @@
 'use client';
 
-import { ColumnField } from '@/app/lib/definitions';
+import { ColumnField, State, Todo } from '@/app/lib/definitions';
 import Link from 'next/link';
-import {
-  UserCircleIcon,
-} from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/buttons';
-import { createTodo } from '@/app/lib/actions';
-import { State } from '@/app/lib/definitions';
+import { updateTodo } from '@/app/lib/actions'
 import { useActionState } from 'react';
+import { UserCircleIcon } from '@heroicons/react/24/outline';
 
-export default function Form({ columns }: { columns: ColumnField[] }) {
+export default function EditColumnForm({
+  todo,
+  columns,
+}: {
+  todo: Todo;
+  columns: ColumnField[]
+}) {
   const initialState: State = { message: null, errors: {} };
-  const [state, formAction] = useActionState(createTodo, initialState);
+  const updateTodoWithId = updateTodo.bind(null, todo);
+  const [state, formAction] = useActionState(updateTodoWithId, initialState);
+  
   return (
     <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
@@ -40,17 +45,9 @@ export default function Form({ columns }: { columns: ColumnField[] }) {
             </select>
             <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
-          <div id="column-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.columnId &&
-              state.errors.columnId.map((error: string) => (
-                <p className="mt-2 text-sm text-red-500" key={error}>
-                  {error}
-                </p>
-              ))}
-          </div>
         </div>
 
-        {/* Task */}
+        {/* Column name */}
         <div className="mb-4">
           <label htmlFor="task" className="mb-2 block text-sm font-medium">
             Task
@@ -61,12 +58,15 @@ export default function Form({ columns }: { columns: ColumnField[] }) {
                 id="task"
                 name="task"
                 type="text"
+                defaultValue={todo.task}
                 placeholder="Enter task"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
             </div>
           </div>
         </div>
+
+        
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
@@ -75,7 +75,7 @@ export default function Form({ columns }: { columns: ColumnField[] }) {
         >
           Cancel
         </Link>
-        <Button type="submit">Create todo</Button>
+        <Button type="submit">Edit task</Button>
       </div>
     </form>
   );
