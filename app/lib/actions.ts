@@ -2,7 +2,7 @@
 // I've used https://nextjs.org/docs/app/building-your-application/authentication heavily as a source for this file. 
 
 'use server';
-import { SignupFormSchema, State, FormState, FormSchema, LoginFormSchema, LoginFormState, ColumnFormSchema, ColumnState } from './definitions';
+import { SignupFormSchema, State, FormState, FormSchema, LoginFormSchema, LoginFormState, ColumnFormSchema, ColumnState, Column, Todo } from './definitions';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import postgres from 'postgres';
@@ -194,8 +194,44 @@ export async function createColumn(prevState: ColumnState, formData: FormData) {
   redirect('/dashboard');
 }
 
-export async function modifyColumn() {
-    console.log("Modifying column.")
+export async function updateColumn(column: Column, prevState: ColumnState, formData: FormData) {
+  console.log("Updating column.")
+  
+  // Validate form using Zod
+  const validatedFields = ColumnFormSchema.safeParse({
+    column_name: formData.get('column_name'),
+  });
+ 
+  // If form validation fails, return errors early. Otherwise, continue.
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Create Column.',
+    };
+  }
+ 
+  // Prepare data for insertion into the database
+  const { column_name } = validatedFields.data;
+
+  console.log(`Updating a column. id:${column.id}, userid: ${column.user_id}, old name: ${column.column_name}, new name: ${column_name} `)
+  // Insert data into the database
+  try {
+    await sql`
+      UPDATE columns
+      SET column_name=${column_name}
+      WHERE id=${column.id}
+    `;
+  } catch (error) {
+    // If a database error occurs, return a more specific error.
+    console.log(error)
+    return {
+      message: 'Database Error: Failed to Create column.',
+    };
+  }
+ 
+  // Revalidate the cache for the dashboard page and redirect the user.
+  revalidatePath('/dashboard');
+  redirect('/dashboard');
 }
 
 export async function deleteColumn(column_id: string) {
@@ -316,8 +352,8 @@ export async function deleteTodo(todo_id: string, column_id: string) {
   revalidatePath('/dashboard')
 }
 
-export async function modifyTodo() {
-    console.log("Modify todo.")
+export async function updateTodo(todo: Todo, prevState: State, formData: FormData) {
+    console.log("Updating todo.")
 }
 
 export async function moveTodoUp(todo_id: string, column_id: string) {

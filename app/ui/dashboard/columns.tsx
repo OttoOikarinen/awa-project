@@ -3,8 +3,6 @@ import TodoWrapper from "./todos";
 import { UpdateColumnButton, DeleteColumnButton, MoveColumnDownButton, MoveColumnUpButton  } from "../buttons";
 import { fetchColumns } from "@/app/lib/data";
 import { getUserFromCookie } from "@/app/lib/session";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { getUser } from "@/app/lib/data";
 
 export default async function ColumnWrapper() {
@@ -27,9 +25,6 @@ export default async function ColumnWrapper() {
     const columns = await fetchColumns(user.id);
     return (
         <div>
-            
-            
-
             <div className="grid grid-cols-5 md:grid-cols-3 sm:grid-cols-1 rounded-lg gap-5">
                 {/* Map-funktio columnien listaamiseen. */ }
                 {columns.map((column) => (
