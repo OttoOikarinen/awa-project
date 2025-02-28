@@ -1,4 +1,5 @@
 /* I have used Grok (AI tool) to create this file based on the definitions.ts file. */
+/* Run this file to create the database on your device. */
 
 CREATE TABLE users (
     id UUID PRIMARY KEY,

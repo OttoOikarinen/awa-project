@@ -1,3 +1,5 @@
+// This is the sidenav. The file has been copied from nextjs-tutorial for UI purposes.
+
 import Link from 'next/link';
 import NavLinks from '@/app/ui/dashboard/nav-links';
 import { PowerIcon } from '@heroicons/react/24/outline';

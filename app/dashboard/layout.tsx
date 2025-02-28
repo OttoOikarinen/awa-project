@@ -1,3 +1,6 @@
+// This is the layout for the whole dashboard page. It means, that the Sidenav is always visible, even when showing todos alongside etc. 
+// Nextjs tutorial used as a source.
+
 import SideNav from "../ui/dashboard/sidenav";
 
 export default function Layout({ children }: { children: React.ReactNode }) {

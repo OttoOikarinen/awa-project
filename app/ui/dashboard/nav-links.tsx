@@ -1,4 +1,5 @@
 // This file has been copied from Nextjs tutorial for purely UI purposes, with slight modifications.
+// It displays the links in the sidenav.
 
 'use client';
 

@@ -1,3 +1,5 @@
+// Shows form to create column.
+
 import Form from '@/app/ui/create-column-form';
 
  

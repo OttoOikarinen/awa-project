@@ -1,3 +1,5 @@
+// This functionality isn't finished yet.
+
 export default function Admin() {
     return (
         <div>

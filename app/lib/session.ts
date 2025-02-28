@@ -1,4 +1,5 @@
-// I've used https://nextjs.org/docs/app/building-your-application/authentication heavily as a source for this file. 
+// This file contains all functions required to handle sessions. 
+// I've done these functions based on https://nextjs.org/docs/app/building-your-application/authentication  
 
 import 'server-only'
 import { SignJWT, jwtVerify } from 'jose'

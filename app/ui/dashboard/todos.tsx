@@ -1,3 +1,5 @@
+// This file displays the todos inside todowrapper.
+
 import { UpdateTodoButton, DeleteTodoButton, MoveTodoDownButton, MoveTodoUpButton } from '../buttons';
 import { fetchTodos } from '@/app/lib/data';
 
@@ -6,14 +8,15 @@ export default async function TodoWrapper({
     }: {
         column_id: string
     }) {
+    // Fetch todos inside columns.
     const todos = await fetchTodos(column_id);
     
     return (
         <div className=" bg-gray-100">
-            {/* Map-funktio todojen listaamiseen. */ }
+            {/* Map all the todos. */ }
             {todos.map((todo) => (
                 <Todo
-                    key={todo.id} // Unique key for each column
+                    key={todo.id}
                     id={todo.id}
                     task={todo.task}
                     column_id={column_id}
@@ -34,9 +37,10 @@ export function Todo({
 }) {
     return (
         <div className="max-w-sm p-4 bg-white shadow-lg rounded-2xl border border-gray-200 justify-center">
+            {/* Display task*/}
             <h2 className="text-md font-semibold text-gray-800">{task}</h2>
 
-            
+            {/* Container for buttons. */}
             <div className="flex gap-2 mt-4">
                 <MoveTodoUpButton todo_id={id} column_id={column_id}/>
                 <MoveTodoDownButton todo_id={id} column_id={column_id}/>

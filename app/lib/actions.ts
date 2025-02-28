@@ -1,5 +1,6 @@
-// All of the actions the buttons call will be here!
-// I've used https://nextjs.org/docs/app/building-your-application/authentication heavily as a source for this file. 
+// Most of the server side actions live here. The buttons call these functions.
+// I've used https://nextjs.org/docs/app/building-your-application/authentication heavily as a source for authentication actions.
+// Also form validation has been done with similar functions as in the Nextjs tutorial. 
 
 'use server';
 import { SignupFormSchema, State, FormState, FormSchema, LoginFormSchema, LoginFormState, ColumnFormSchema, ColumnState, Column, Todo } from './definitions';
@@ -16,6 +17,7 @@ const sql = postgres(process.env.DATABASE_URL!);
 const CreateTodo = FormSchema.omit({ id: true, date: true });
 export async function createTodo(prevState: State, formData: FormData) {
 
+  // First get user.
   const email = await getUserFromCookie();
   if (email == null) {
     revalidatePath('/dashboard/');
@@ -28,13 +30,13 @@ export async function createTodo(prevState: State, formData: FormData) {
     }
   }
     
-  // Validate form using Zod
+  // Validate form using Zod.
   const validatedFields = CreateTodo.safeParse({
     columnId: formData.get('columnId'),
     task: formData.get('task'),
   });
    
-  // If form validation fails, return errors early. Otherwise, continue.
+  // If form validation fails, return errors.
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
@@ -42,16 +44,16 @@ export async function createTodo(prevState: State, formData: FormData) {
     };
   }
    
-  // Prepare data for insertion into the database
+  // This data will be inserted into database.
   const { columnId, task } = validatedFields.data;
   const id = v4()
 
   // Get new todo index.
   const todos = await fetchTodos(columnId)
-  const todo_index = todos.length || 0
+  const todo_index = todos.length || 0 // IF no todos, index = 0.
 
-  // Insert data into the database
-  console.log(`Creating a new todo. id:${id}, userid: ${user.id}, task: ${task}, index: ${todo_index}  `)
+  // Create new todo to the database.
+  // console.log(`Creating a new todo. id:${id}, userid: ${user.id}, task: ${task}, index: ${todo_index}  `)
   try {
     await sql`
       INSERT INTO todos (id, user_id, column_id, task, todo_index, done)
@@ -61,43 +63,43 @@ export async function createTodo(prevState: State, formData: FormData) {
     console.log(error)
     // If a database error occurs, return a more specific error.
     return {
-      message: 'Database Error: Failed to Create todo.',
+      message: 'Database Error: Failed to create todo.',
     };
   }
-  console.log("Created todo.")
   // Revalidate the cache for the dashboard page and redirect the user.
   revalidatePath('/dashboard/');
   redirect('/dashboard/');
 }
 
 export async function registerUser(state: FormState, formData: FormData) {
-  console.log("Registering user.")
 
+  // Validate the form with zod.
   const validatedFields = SignupFormSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
     password: formData.get('password'),
   })
 
+  // If not succesfull, return errors.
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
     }
   }
 
+  // Prepare data to be inserted into database.
   const { name, email, password } = validatedFields.data
   const hashedPassword = await bcrypt.hash(password, 10)
   const userID = v4()
-  console.log(`Trying to create new user ${name} with email ${email} and password ${password}.`)
-  console.log(`UserID: ${userID}`)
+
+  //console.log(`Trying to create new user ${name} with email ${email} and password ${password}.`)
+  //console.log(`UserID: ${userID}`)
   try {
     await sql`
     INSERT INTO users (id, name, email, password, isAdmin)
     VALUES (${userID}, ${name}, ${email}, ${hashedPassword}, false)
     `;
-    console.log("Created new user.")
   } catch (error) {
-    console.log("Failed to create new user.")
     console.log(error)
     return {
       message: 'Database Error: failed to create new user.'
@@ -113,35 +115,45 @@ export async function logout() {
 }
 
 export async function loginUser(state: LoginFormState, formData: FormData) {
-  console.log("Authenticating.")
+
+  // Check form with zod.
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
   })
 
+  // Not successful, return errors.
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
     }
   }
-  console.log("Form inputs were validated succesfully.")
+
   const { email, password } = validatedFields.data;
+
+  // Get user who is trying to login.
   const user = await getUser(email);
   if (!user) return null;
-  console.log("In actions/loginUser. Found user, comparing passwords...")
+
+  // Check if passwords match.
   const passwordsMatch = await bcrypt.compare(password, user.password);
   if (passwordsMatch) {
     console.log("Passwords match! Redirecting...")
     createSession(user.id, user.email);
     redirect('/dashboard');
+  } else {
+    redirect('/login')
   }
 }
 
+// Not implemented yet.
 export async function deleteUser() {
     console.log("Delete user.")
 }
 
 export async function createColumn(prevState: ColumnState, formData: FormData) {
+
+  // Get user first.
   const email = await getUserFromCookie();
   if (email == null) {
     revalidatePath('/dashboard/');
@@ -163,7 +175,7 @@ export async function createColumn(prevState: ColumnState, formData: FormData) {
     column_name: formData.get('column_name'),
   });
  
-  // If form validation fails, return errors early. Otherwise, continue.
+  // If form validation fails, return errors.
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
@@ -174,7 +186,7 @@ export async function createColumn(prevState: ColumnState, formData: FormData) {
   // Prepare data for insertion into the database
   const { column_name } = validatedFields.data;
   const id = v4()
-  console.log(`Creating a new column. id:${id}, userid: ${user.id}, name: ${column_name}, index: ${column_index}  `)
+
   // Insert data into the database
   try {
     await sql`
@@ -182,27 +194,25 @@ export async function createColumn(prevState: ColumnState, formData: FormData) {
       VALUES ( ${id}, ${user.id}, ${column_name}, ${column_index})
     `;
   } catch (error) {
-    // If a database error occurs, return a more specific error.
+    // Log error.
     console.log(error)
     return {
       message: 'Database Error: Failed to Create column.',
     };
   }
  
-  // Revalidate the cache for the dashboard page and redirect the user.
+  // Reload data and direct user to dashboard.
   revalidatePath('/dashboard');
   redirect('/dashboard');
 }
 
-export async function updateColumn(column: Column, prevState: ColumnState, formData: FormData) {
-  console.log("Updating column.")
-  
-  // Validate form using Zod
+export async function updateColumn(column: Column, prevState: ColumnState, formData: FormData) {  
+  // Zod.
   const validatedFields = ColumnFormSchema.safeParse({
     column_name: formData.get('column_name'),
   });
  
-  // If form validation fails, return errors early. Otherwise, continue.
+  // If not successfull, return errors.
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
@@ -210,11 +220,9 @@ export async function updateColumn(column: Column, prevState: ColumnState, formD
     };
   }
  
-  // Prepare data for insertion into the database
   const { column_name } = validatedFields.data;
 
-  console.log(`Updating a column. id:${column.id}, userid: ${column.user_id}, old name: ${column.column_name}, new name: ${column_name} `)
-  // Insert data into the database
+  // Update specific column.
   try {
     await sql`
       UPDATE columns
@@ -222,7 +230,7 @@ export async function updateColumn(column: Column, prevState: ColumnState, formD
       WHERE id=${column.id}
     `;
   } catch (error) {
-    // If a database error occurs, return a more specific error.
+    // Log errors.
     console.log(error)
     return {
       message: 'Database Error: Failed to Create column.',
@@ -235,7 +243,7 @@ export async function updateColumn(column: Column, prevState: ColumnState, formD
 }
 
 export async function deleteColumn(column_id: string) {
-  console.log("Deleting column.")
+  // Get user from session.
   const email = await getUserFromCookie();
   const user = await getUser(email)
 
@@ -243,6 +251,7 @@ export async function deleteColumn(column_id: string) {
     return
   }
 
+  // Get this column and all other columns user have.
   const this_column = await fetchSingleColumn(column_id);
   const all_columns = await fetchColumns(user.id);
   const lenghtOfArray = all_columns.length
@@ -250,9 +259,10 @@ export async function deleteColumn(column_id: string) {
   if (!this_column) {
     return
   }
-  console.log(`Array lenght = ${lenghtOfArray}`)
+
+  // Since the display of columns is arranged based on the index they have, all indexes have to be updated, when one is removed.
+  // So we change the index of all higher columns.
   if (this_column.column_index + 1 < lenghtOfArray) {
-    console.log(`Column index now ${this_column.column_index}`)
     var i  = this_column.column_index + 1
     while (i < lenghtOfArray) {
 
@@ -260,13 +270,13 @@ export async function deleteColumn(column_id: string) {
       i = i + 1;
     }
   }
-
+  // And finally delete the column.
   await deleteColumnFromDatabase(column_id)
   revalidatePath('/dashboard')
 }
 
 export async function moveColumnUp(column_id: string) {
-  console.log("Move column up.")
+  // First get user.
   const email = await getUserFromCookie();
   const user = await getUser(email)
 
@@ -274,6 +284,7 @@ export async function moveColumnUp(column_id: string) {
     return
   }
 
+  // Get this column and all columns the user have.
   const this_column = await fetchSingleColumn(column_id);
   const all_columns = await fetchColumns(user.id);
   const lenghtOfArray = all_columns.length
@@ -282,10 +293,11 @@ export async function moveColumnUp(column_id: string) {
     return
   }
 
+  // Column might already be at the last place in the array, so it cannot be moved anymore further.
   if ((this_column?.column_index + 1) == lenghtOfArray) {
-    console.log("index already as big as possible.");
     return
   } else {
+    // Else change the index with the column after it.
     const column_above = all_columns[this_column.column_index + 1]
     const new_index_this_column = column_above.column_index
     const new_index_column_above = this_column.column_index
@@ -298,7 +310,7 @@ export async function moveColumnUp(column_id: string) {
 }
 
 export async function moveColumnDown(column_id: string) {
-  console.log("Move column down.")
+  // First get user.
   const email = await getUserFromCookie();
   const user = await getUser(email)
 
@@ -306,6 +318,7 @@ export async function moveColumnDown(column_id: string) {
     return
   }
 
+  // Get this column and all columns the user have.
   const this_column = await fetchSingleColumn(column_id);
   const all_columns = await fetchColumns(user.id);
 
@@ -313,10 +326,11 @@ export async function moveColumnDown(column_id: string) {
     return
   }
 
+  // Column might already be at the first place in the array, so it cannot be moved anymore further.
   if (this_column?.column_index == 0) {
-    console.log("index already 0");
     return
   } else {
+    // Else change the index with the column before it.
     const column_below = all_columns[this_column.column_index - 1]
     const new_index_this_column = column_below.column_index
     const new_index_column_below = this_column.column_index
@@ -329,7 +343,7 @@ export async function moveColumnDown(column_id: string) {
 }
 
 export async function deleteTodo(todo_id: string, column_id: string) {
-  console.log("Delete todo.")
+  // Fetch this todo and all todos in the same column.
   const this_todo = await fetchSingleTodo(todo_id);
   const all_todos = await fetchTodos(column_id);
   const lenghtOfArray = all_todos.length
@@ -337,9 +351,8 @@ export async function deleteTodo(todo_id: string, column_id: string) {
   if (!this_todo) {
     return
   }
-  console.log(`Array lenght = ${lenghtOfArray}`)
+  // If the todo is not the last on in the array, update all todos after it with new index.
   if (this_todo.todo_index + 1 < lenghtOfArray) {
-    console.log(`Todo index now ${this_todo.todo_index}`)
     var i  = this_todo.todo_index + 1
     while (i < lenghtOfArray) {
 
@@ -347,21 +360,20 @@ export async function deleteTodo(todo_id: string, column_id: string) {
       i = i + 1;
     }
   }
-
+  // Finally delete the todo.
   await deleteTodoFromDatabase(todo_id)
   revalidatePath('/dashboard')
 }
 
 export async function updateTodo(todo: Todo, prevState: State, formData: FormData) {
-  console.log("Updating todo.")
 
-  // Validate form using Zod
+  // Validate with Zod.
   const validatedFields = CreateTodo.safeParse({
     columnId: formData.get('columnId'),
     task: formData.get('task'),
   });
    
-  // If form validation fails, return errors early. Otherwise, continue.
+  // Return errors if not success.
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
@@ -369,28 +381,27 @@ export async function updateTodo(todo: Todo, prevState: State, formData: FormDat
     };
   }
    
-  // Prepare data for insertion into the database
   const { columnId, task } = validatedFields.data;
   
-  // Insert data into the database
+  // Update todo with new task and column. 
   try {
     await sql`UPDATE todos SET task=${task}, column_id=${columnId} WHERE id=${todo.id}`;
   } catch (error) {
+    // Log errors.
     console.log(error)
-    // If a database error occurs, return a more specific error.
     return {
       message: 'Database Error: Failed to Create todo.',
     };
   }
 
-  // Revalidate the cache for the dashboard page and redirect the user.
+  // Reload the data and redirect. 
   revalidatePath('/dashboard');
   redirect('/dashboard');
 }
 
 export async function moveTodoUp(todo_id: string, column_id: string) {
-  console.log("Move todo up.")
 
+  // Fetch this todo and other todos in the same column. 
   const this_todo = await fetchSingleTodo(todo_id);
   const all_todos = await fetchTodos(column_id);
   const lenghtOfArray = all_todos.length
@@ -399,10 +410,11 @@ export async function moveTodoUp(todo_id: string, column_id: string) {
     return
   }
 
+  // The todo might be the last one already, cannot be moved further.
   if ((this_todo?.todo_index + 1) == lenghtOfArray) {
-    console.log("index already as big as possible.");
     return
   } else {
+    // Else switch indexed with the todo after it. 
     const todo_above = all_todos[this_todo.todo_index + 1]
     const new_index_this_todo = todo_above.todo_index
     const new_index_todo_above = this_todo.todo_index
@@ -415,8 +427,8 @@ export async function moveTodoUp(todo_id: string, column_id: string) {
 }
 
 export async function moveTodoDown(todo_id: string, column_id: string) {
-  console.log("Move todo down.")
 
+  // Fetch this todo and other todos in the same column. 
   const this_todo = await fetchSingleTodo(todo_id);
   const all_todos = await fetchTodos(column_id);
 
@@ -424,10 +436,11 @@ export async function moveTodoDown(todo_id: string, column_id: string) {
     return
   }
 
+  // Todo might already be first, do nothing.
   if (this_todo?.todo_index == 0) {
-    console.log("index already 0");
     return
   } else {
+    // Else change the index with the todo before it.
     const todo_above = all_todos[this_todo.todo_index - 1]
     const new_index_this_todo = todo_above.todo_index
     const new_index_todo_above = this_todo.todo_index

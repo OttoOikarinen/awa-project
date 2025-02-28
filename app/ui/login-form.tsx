@@ -1,11 +1,11 @@
-// I have used Next.js nextjs-dasboard tutorial as a base for this file. 
+// I have relied strongly to Next.js nextjs-dasboard tutorial. 
+
 'use client'
 import { Button } from "./buttons"
 
 import {
     AtSymbolIcon,
     KeyIcon,
-    ExclamationCircleIcon,
   } from '@heroicons/react/24/outline';
   import { ArrowRightIcon } from '@heroicons/react/20/solid';
   import { useActionState } from "react";

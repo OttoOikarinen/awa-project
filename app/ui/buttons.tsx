@@ -1,4 +1,4 @@
-// I have used Next.js nextjs-dashboard tutorial as a strong base for this file. 
+// I have used Next.js nextjs-dashboard tutorial as source how to make buttons. The Button-function has been copied from there for aesthetic purposes. 
 import clsx from 'clsx';
 import { PencilIcon, PlusIcon, TrashIcon, CheckIcon, ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';

@@ -1,4 +1,4 @@
-// Tähän pitää importtaa joku sql kutsu, joka sitten hakee kolumnit tälle käyttäjälle. 
+// This file shows all the users columns inside ColumnWrapper, called in the (todos)/page.tsx 
 import TodoWrapper from "./todos";
 import { UpdateColumnButton, DeleteColumnButton, MoveColumnDownButton, MoveColumnUpButton  } from "../buttons";
 import { fetchColumns } from "@/app/lib/data";
@@ -6,6 +6,7 @@ import { getUserFromCookie } from "@/app/lib/session";
 import { getUser } from "@/app/lib/data";
 
 export default async function ColumnWrapper() {
+    // First get user.
     const email = await getUserFromCookie();
       if (email == null) {
         return (
@@ -22,14 +23,16 @@ export default async function ColumnWrapper() {
             </div>
         )
       }
+    
+    // Fetch columns for the user.
     const columns = await fetchColumns(user.id);
     return (
         <div>
             <div className="grid grid-cols-5 md:grid-cols-3 sm:grid-cols-1 rounded-lg gap-5">
-                {/* Map-funktio columnien listaamiseen. */ }
+                {/* Map the columns inside a grid. */ }
                 {columns.map((column) => (
                     <Column
-                        key={column.id} // Unique key for each column
+                        key={column.id}
                         id={column.id}
                         name={column.column_name}
                     />
@@ -46,14 +49,13 @@ export function Column({
     id: string;
     name: string;
 }) {
-    // Search for all of the todos inside this column.
 
     return (
         <div className="bg-gray-100 p-4 rounded-lg shadow-md border border-gray-300">
-            {/* Column Title */}
+            {/* Column name */}
             <h2 className="text-lg font-semibold text-gray-800">{name}</h2>
 
-            {/* Buttons Container */}
+            {/* Buttons inside a container */}
             <div className="flex space-x-2">
                 <MoveColumnUpButton id={id}/>
                 <MoveColumnDownButton id={id}/>

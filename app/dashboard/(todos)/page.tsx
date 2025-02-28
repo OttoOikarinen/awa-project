@@ -1,6 +1,6 @@
+// This page shows all the user's todos (if there are any).
 
 import ColumnWrapper from '@/app/ui/dashboard/columns';
-import { Button } from '@/app/ui/buttons';
 import Link from 'next/link';
 
 export default function Todos() {

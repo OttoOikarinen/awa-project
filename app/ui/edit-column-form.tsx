@@ -1,3 +1,6 @@
+// User can edit column from this file. I have used as a base the nextjs tutorial create invoice file, and modified the funcitonality heavily to my purposes.
+// I have retained the Tailwind UI, since it looks nice :)
+
 'use client';
 
 import { ColumnState, Column } from '@/app/lib/definitions';

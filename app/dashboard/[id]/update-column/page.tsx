@@ -1,3 +1,4 @@
+// This page shows the column update form. I have used Nextjs tutorial heavily as a base for this file.
 import Form from '@/app/ui/edit-column-form';
 import {  fetchSingleColumn } from '@/app/lib/data';
 import { notFound } from 'next/navigation';

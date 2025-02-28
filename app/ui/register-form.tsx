@@ -8,7 +8,6 @@ import {
     UserIcon,
     AtSymbolIcon,
     KeyIcon,
-    ExclamationCircleIcon,
   } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { registerUser } from '@/app/lib/actions'

@@ -1,3 +1,5 @@
+// Here are all the definitions for types and formvalidationschemas used in the application.
+
 import { z } from 'zod';
 
 export type User = {
