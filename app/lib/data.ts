@@ -133,3 +133,25 @@ export async function deleteTodoFromDatabase(todo_id: string) {
     console.log(error)
   } 
 }
+
+export async function fetchUserAmount() {
+  try {
+    const users = await sql<User[]>`SELECT * FROM users`;
+    const userAmount = users.length;
+    return userAmount || 0;
+  } catch (error) {
+    console.log(error)
+    return 0
+  }
+}
+
+export async function fetchTodoAmount() {
+  try {
+    const todos = await sql<Todo[]>`SELECT * FROM todos`;
+    const todoAmount = todos.length;
+    return todoAmount || 0;
+  } catch (error) {
+    console.log(error)
+    return 0
+  }
+}

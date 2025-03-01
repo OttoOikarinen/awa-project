@@ -1,17 +1,11 @@
 // Home page.
-'use client'
+
 import Link from "next/link";
+import { fetchUserAmount, fetchTodoAmount } from "./lib/data";
 
-
-
-const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' },
-]
-
-export default function Home() {
+export default async  function Home() {
+  const amoutOfUsers = await fetchUserAmount()
+  const amountOfTodos = await fetchTodoAmount()
 
   return (
     <div className="bg-white">
@@ -63,7 +57,7 @@ export default function Home() {
               App to handle all of your tasks.
             </h1>
             <p className="mt-8 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8">
-              Order your tasks in kanban style boards to maximize your efficiency.
+              Order your tasks in kanban style boards to maximize your efficiency. {amoutOfUsers} users already use this app to handle their {amountOfTodos} todos.
             </p>
           </div>
         </div>
