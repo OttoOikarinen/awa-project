@@ -23,6 +23,14 @@ Then you can use the buttons for moving the todos and columns around and updatin
 
 From the side panel you can log out.
 
+## Technology choices
+
+For this project, as ordered, I used Node.js. I choose Next.js framework, since it seems to be quite popular at the moment and my friend who is actually working for a software company, recommended it. For this purpose I went through the Next.js tutorial and used it as a source for how to do things in this project as well. I also used their documentations extensively. It wasn't easy to get a grip on yet another framework, since the whole course used Express.js, but it paid in the end, since Next.js seems a lot more fun to code with. 
+
+For database I used PostgreSQL, since it is widely used and uses basic SQL syntax. It was also used in the Next.js tutorial, so implementation was easier.
+
+I used GitHub to host the codebase, since I've used that for years and it was the easiest choice.
+
 ## Features and points requested
 
 | Feature | Points requested |
@@ -32,8 +40,13 @@ From the side panel you can log out.
 | User is able to delete whole account | 1 |
 | Home-page has counters | 1 |
 | UI translated to 2 languages | 2 |
+| Navigation panel | 1 |
+| User can logout | 1 |
+| Extensive metadata on the page | 1 |
+| Custom favicon.ico | 1 |
 | *Total* | 34 |
 
+Extensive metadata means robots.ts and sitemap.ts files as well as metadata in app/layout.tsx file. 
 
 
 ## Declaration of AI usage
