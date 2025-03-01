@@ -1,4 +1,4 @@
-// Home page.
+// Home page. This UI layout has been copied from Tailwind CSS components and modified for this purpose.
 
 import Link from "next/link";
 import { fetchUserAmount, fetchTodoAmount } from "./lib/data";
