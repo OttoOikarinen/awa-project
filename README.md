@@ -29,6 +29,8 @@ For this project, as ordered, I used Node.js. I choose Next.js framework, since 
 
 For database I used PostgreSQL, since it is widely used and uses basic SQL syntax. It was also used in the Next.js tutorial, so implementation was easier.
 
+I used Tailwind CSS, since they had readymade components available for free to modify.
+
 I used GitHub to host the codebase, since I've used that for years and it was the easiest choice.
 
 ## Features and points requested
@@ -38,12 +40,13 @@ I used GitHub to host the codebase, since I've used that for years and it was th
 | Mandatory Features | 25 |
 | Learned a whole new framework for this (Next.js) | 5 |
 | User is able to delete whole account | 1 |
-| Home-page has counters | 1 |
+| Home-page has counters to show current users and todos | 1 |
 | UI translated to 2 languages | 2 |
 | Navigation panel | 1 |
 | User can logout | 1 |
 | Extensive metadata on the page | 1 |
 | Custom favicon.ico | 1 |
+| not-found pages for updating columns and todos | 1 |
 | *Total* | 34 |
 
 Extensive metadata means robots.ts and sitemap.ts files as well as metadata in app/layout.tsx file. 
