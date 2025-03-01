@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AdvancedWebApplicationsProject
+Author: Otto Oikarinen
 
-## Getting Started
+## Installation guidelines
 
-First, run the development server:
+1. Install the files from for example from GitHub: `git clone https://github.com/OttoOikarinen/awa-project.git`
+2. cd to the new directory.
+3. Install dependecies using `npm install`
+4. Setup PostgreSQL. Docs for that can be found: https://www.postgresql.org/docs/ and start it. 
+5. Create a new database following the docs. 
+6. Create the tables running `\i /path/to/awa-project/app/lib/database_setup.sql`
+7. Change the name of .env.template to .env and fill the required variables.
+8. Run the app `npm run dev` or `pnpm run dev`
+9. Open the application in browser in localhost:3000 or whatever the provided port is. 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## User manual
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+From localhost:3000/ you can choose to register or sign in. Register a new account. Password has requirements (8 characters, numbers, small and capital letters and special characters.) After that sign in.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You can create a column by clicking create column and providing the name. Then you can create a todo by clicking Create todo and providing the task and the column you want to put it in. You cannot create a todo without a column first.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Then you can use the buttons for moving the todos and columns around and updating and deleting them. You can move a todo into another column by clicking edit button and changing the column there.
 
-## Learn More
+From the side panel you can log out.
 
-To learn more about Next.js, take a look at the following resources:
+## Features and points requested
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Feature | Points requested |
+|:--------|:----------------:|
+| Mandatory Features | 25 |
+| Learned a whole new framework for this (Next.js) | 5 |
+| User is able to delete whole account | 1 |
+| Home-page has counters | 1 |
+| UI translated to 2 languages | 2 |
+| *Total* | 34 |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Declaration of AI usage
+For this project I have used two AI tools. ChatGPT and Grok. 
+AI has been used for three purposes:
+1. I created the database_setup.sql file based on the definitions file just to speed things up.
+2. I have created a few UI components for the app with AI. For example "Give Tailwind CSS classNames for a button".
+3. I have used it to debug errors. For example "PostgreSQL gives this error, tell me what's wrong with my SQL propmt."
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+All of the functionalities have been written by me with the help of the tutorial and docs.
+
+## Declaration for other sources.
+
+This project has been based on the nextjs-dashboard tutorial, which is available on their website to get to know nextjs.I finished the tutorial before starting the project. I have used the tutorial as a strong source for how to do things in nextjs. Some UI's have been somewhat copied from the tutorial, because they looked nice. Functionality has been modified by me to fit the purposes of this project.
+
+I have also used nextjs documentation. From there session management and middleware have been copied, since they were already probably written in the best way possibble and I didn't want to mess with things for security reasons and all other possible reasons. I have clearly marked to files, what I have used as a source. 
+
+I also used PostgreSQL documentation as a source for how to setup database etc.
