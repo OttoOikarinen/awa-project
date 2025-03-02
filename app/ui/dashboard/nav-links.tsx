@@ -4,7 +4,8 @@
 'use client';
 
 import {
-  HomeIcon,
+  ListBulletIcon,
+  UserIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -12,7 +13,8 @@ import clsx from 'clsx';
 
 // Map of links to display in the side navigation.
 const links = [
-  { name: 'Todos', href: '/dashboard', icon: HomeIcon },
+  { name: 'Todos', href: '/dashboard', icon: ListBulletIcon },
+  { name: 'Profile', href: '/dashboard/profile', icon: UserIcon }
 ];
 
 export default function NavLinks() {

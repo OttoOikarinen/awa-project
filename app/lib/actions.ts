@@ -148,7 +148,26 @@ export async function loginUser(state: LoginFormState, formData: FormData) {
 
 // Not implemented yet.
 export async function deleteUser() {
-    console.log("Delete user.")
+  // First get user.
+  const email = await getUserFromCookie();
+  if (email == null) {
+    revalidatePath('/dashboard/');
+    redirect('/dashboard/');
+  }
+  const user = await getUser(email)
+  if (!user) {
+    return {
+      message: "Couldn't find user."
+    }
+  }
+
+  try {
+    await sql`DELETE FROM users
+    WHERE id = ${user.id}`;
+    await logout()
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export async function createColumn(prevState: ColumnState, formData: FormData) {
