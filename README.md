@@ -54,7 +54,7 @@ Extensive metadata means robots.ts and sitemap.ts files as well as metadata in a
 ## Declaration of AI usage
 For this project I have used two AI tools. ChatGPT and Grok. 
 AI has been used for three purposes:
-1. I created the database_setup.sql file based on the definitions file just to speed things up.
+1. I created the database_setup.sql file with Grok based on the definitions file just to speed things up.
 2. I have created a few UI components for the app with AI. For example "Give Tailwind CSS classNames for a button".
 3. I have used it to debug errors. For example "PostgreSQL gives this error, tell me what's wrong with my SQL propmt."
 
@@ -62,7 +62,7 @@ All of the functionalities have been written by me with the help of the tutorial
 
 ## Declaration for other sources.
 
-This project has been based on the nextjs-dashboard tutorial, which is available on their website to get to know nextjs.I finished the tutorial before starting the project. I have used the tutorial as a strong source for how to do things in nextjs. Some UI's have been somewhat copied from the tutorial, because they looked nice. Functionality has been modified by me to fit the purposes of this project.
+This project has been based on the nextjs-dashboard tutorial, which is available on their website to get to know nextjs. I finished the tutorial before starting the project. I have used the tutorial as a strong source for how to do things in nextjs. Some UI's have been somewhat copied from the tutorial, because they looked nice. Functionality has been modified by me to fit the purposes of this project.
 
 I have also used nextjs documentation. From there session management and middleware have been copied, since they were already probably written in the best way possibble and I didn't want to mess with things for security reasons and all other possible reasons. I have clearly marked to files, what I have used as a source. 
 
