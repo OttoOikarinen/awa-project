@@ -28,7 +28,7 @@ export default async function ColumnWrapper() {
     const columns = await fetchColumns(user.id);
     return (
         <div>
-            <div className="grid grid-cols-5 md:grid-cols-3 sm:grid-cols-1 rounded-lg gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 rounded-lg gap-5">
                 {/* Map the columns inside a grid. */ }
                 {columns.map((column) => (
                     <Column
@@ -51,12 +51,12 @@ export function Column({
 }) {
 
     return (
-        <div className="bg-gray-100 p-4 rounded-lg shadow-md border border-gray-300">
+        <div className="min-w-sm w-full bg-gray-100 p-4 rounded-lg shadow-md border border-gray-300">
             {/* Column name */}
-            <h2 className="text-lg font-semibold text-gray-800">{name}</h2>
+            <h2 className="text-lg break-words font-semibold text-gray-800">{name}</h2>
 
             {/* Buttons inside a container */}
-            <div className="flex space-x-2">
+            <div className="flex flex-wrap justify-start gap-2">
                 <MoveColumnUpButton id={id}/>
                 <MoveColumnDownButton id={id}/>
                 <UpdateColumnButton id={id}/>

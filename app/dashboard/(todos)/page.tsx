@@ -6,7 +6,7 @@ import Link from 'next/link';
 export default function Todos() {
     return (
         <div>
-            <div className="flex gap-4">
+            <div className="flex gap-4 mb-4">
                 <Link
                   href="/dashboard/create-todo"
                   className="rounded-md bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-blue-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
@@ -20,7 +20,7 @@ export default function Todos() {
                   Create Column
                 </Link>
             </div>
-            <ColumnWrapper />
+            <ColumnWrapper/>
         </div>
     )
 }

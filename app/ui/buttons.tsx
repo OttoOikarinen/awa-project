@@ -38,7 +38,7 @@ export function UpdateTodoButton({ id }: { id: string }) {
   return (
     <Link
       href={`/dashboard/${id}/update-todo`}
-      className="rounded-md border p-2 hover:bg-gray-100"
+      className="rounded-md border p-2 hover:bg-sky-100 hover:text-blue-600"
     >
       <PencilIcon className="w-5" />
     </Link>
@@ -50,7 +50,7 @@ export function DeleteTodoButton({ todo_id, column_id }: { todo_id: string, colu
   return (
     <>
       <form action={deleteTodoWithId}>
-        <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
+        <button type="submit" className="rounded-md border p-2 hover:bg-red-500 hover:text-white">
           <span className="sr-only">Delete todo</span>
           <TrashIcon className="w-5" />
         </button>
@@ -75,7 +75,7 @@ export function UpdateColumnButton({ id }: { id: string }) {
   return (
     <Link
       href={`/dashboard/${id}/update-column`}
-      className="rounded-md border p-2 hover:bg-gray-100"
+      className="rounded-md border p-2 hover:bg-sky-100 hover:text-blue-600"
     >
       <PencilIcon className="w-5" />
     </Link>
@@ -87,7 +87,7 @@ export function DeleteColumnButton({ id }: { id: string }) {
   return (
     <>
       <form action={deleteColumnWithId}>
-        <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
+        <button type="submit" className="rounded-md border p-2 hover:bg-red-500 hover:text-white">
           <span className="sr-only">Delete column</span>
           <TrashIcon className="w-5" />
         </button>
@@ -101,7 +101,7 @@ export async function MoveColumnDownButton({id}: {id: string}){
   return (
     <>
       <form action={moveColumnDownWithID}>
-        <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
+        <button type="submit" className="rounded-md border p-2 hover:bg-sky-100 hover:text-blue-600">
           <span className="sr-only">Move columm down</span>
           <ArrowUpIcon className="w-5" />
         </button>
@@ -117,7 +117,7 @@ export async function MoveColumnUpButton({id}: {id: string}){
   return (
     <>
       <form action={moveColumnUpWithID}>
-        <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
+        <button type="submit" className="rounded-md border p-2 hover:bg-sky-100 hover:text-blue-600">
           <span className="sr-only">Move column up</span>
           <ArrowDownIcon className="w-5" />
         </button>
@@ -131,7 +131,7 @@ export async function MoveTodoDownButton({todo_id, column_id}: {todo_id: string;
   return (
     <>
       <form action={moveTodoDownWithID}>
-        <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
+        <button type="submit" className="rounded-md border p-2 hover:bg-sky-100 hover:text-blue-600">
           <span className="sr-only">Move todo down</span>
           <ArrowUpIcon className="w-5" />
         </button>
@@ -147,7 +147,7 @@ export async function MoveTodoUpButton({todo_id, column_id }: {todo_id: string; 
   return (
     <>
       <form action={moveTodoUpWithID}>
-        <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
+        <button type="submit" className="rounded-md border p-2 hover:bg-sky-100 hover:text-blue-600">
           <span className="sr-only">Move todo up</span>
           <ArrowDownIcon className="w-5" />
         </button>

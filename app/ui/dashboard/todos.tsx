@@ -12,7 +12,7 @@ export default async function TodoWrapper({
     const todos = await fetchTodos(column_id);
     
     return (
-        <div className=" bg-gray-100">
+        <div className="w-full max-w-md bg-gray-100">
             {/* Map all the todos. */ }
             {todos.map((todo) => (
                 <Todo
@@ -36,12 +36,12 @@ export function Todo({
     column_id: string;
 }) {
     return (
-        <div className="max-w-sm p-4 bg-white shadow-lg rounded-2xl border border-gray-200 justify-center">
+        <div className="w-full max-w-md p-4 mt-2 mb-2 bg-white shadow-lg rounded-2xl border border-gray-200 justify-right">
             {/* Display task*/}
-            <h2 className="text-md font-semibold text-gray-800">{task}</h2>
+            <h2 className="text-md break-words font-semibold text-gray-800">{task}</h2>
 
-            {/* Container for buttons. */}
-            <div className="flex gap-2 mt-4">
+            {/* Container for buttons.*/}
+            <div className="flex flex-wrap justify-start gap-2 mt-4">
                 <MoveTodoUpButton todo_id={id} column_id={column_id}/>
                 <MoveTodoDownButton todo_id={id} column_id={column_id}/>
                 <UpdateTodoButton id={id}/>
