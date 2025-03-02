@@ -4,8 +4,8 @@ import Link from "next/link";
 import { fetchUserAmount, fetchTodoAmount } from "./lib/data";
 
 export default async  function Home() {
-  const amoutOfUsers = await fetchUserAmount()
-  const amountOfTodos = await fetchTodoAmount()
+  const amoutOfUsers = await fetchUserAmount() || 0;
+  const amountOfTodos = await fetchTodoAmount() || 0;
 
   return (
     <div className="bg-white">
