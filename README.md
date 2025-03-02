@@ -8,7 +8,7 @@ Author: Otto Oikarinen
 3. Install dependecies using `npm install`
 4. Setup PostgreSQL. Docs for that can be found: https://www.postgresql.org/docs/ and start it. 
 5. Create a new database following the docs. 
-6. Create the tables running `\i /path/to/awa-project/app/lib/database_setup.sql`
+6. Create the tables running `\i /path/to/awa-project/app/lib/database_setup.sql` inside the new database.
 7. Change the name of .env.template to .env and fill the required variables.
 8. Run the app `npm run dev` or `pnpm run dev`
 9. Open the application in browser in localhost:3000 or whatever the provided port is. 
@@ -46,7 +46,8 @@ I used GitHub to host the codebase, since I've used that for years and it was th
 | Extensive metadata on the page | 1 |
 | Custom favicon.ico | 1 |
 | not-found pages for updating columns and todos | 1 |
-| *Total* | 37 |
+| Profile page | 1 |
+| *Total* | 38 |
 
 Extensive metadata means robots.ts and sitemap.ts files as well as metadata in app/layout.tsx file. 
 
