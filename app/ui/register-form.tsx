@@ -17,6 +17,7 @@ export default function RegisterForm() {
   const [state, action, isPending] = useActionState(registerUser, undefined)
 
     return (
+      <div>
         <form action={action} className="space-y-3">
           <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
             <h1 className="mb-3 text-2xl">
@@ -85,11 +86,14 @@ export default function RegisterForm() {
                 </div>
             </div>
             <input type="hidden" name="redirectTo" value="/login" />
+            
             <Button className="mt-4 w-full" aria-disabled={isPending}>
               Register <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
             </Button>
-            <div
-              className="flex h-8 items-end space-x-1"
+          </div>
+        </form>
+        <div
+              className="flex h-12 items-end space-x-1 text-red-600 mt-10 ml-6"
               aria-live="polite"
               aria-atomic="true"
             >
@@ -104,6 +108,5 @@ export default function RegisterForm() {
                 </div>
               )}
             </div>
-          </div>
-        </form>
+      </div>
 )}
