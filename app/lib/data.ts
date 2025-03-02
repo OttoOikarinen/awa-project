@@ -155,3 +155,14 @@ export async function fetchTodoAmount() {
     return 0
   }
 }
+
+export async function fetchTodoAmountForUser(user_id: string) {
+  try {
+    const todos = await sql<Todo[]>`SELECT * FROM todos WHERE user_id = ${user_id}`;
+    const todoAmount = todos.length
+    return todoAmount || 0;
+  } catch (error) {
+    console.log(error)
+    return 0;
+  }
+}
