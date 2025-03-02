@@ -39,7 +39,6 @@ I used GitHub to host the codebase, since I've used that for years and it was th
 |:--------|:----------------:|
 | Mandatory Features | 25 |
 | Learned a whole new framework for this (Next.js) | 5 |
-| User is able to delete whole account | 1 |
 | Home-page has counters to show current users and todos | 1 |
 | Navigation panel | 1 |
 | User can logout | 1 |
@@ -47,7 +46,7 @@ I used GitHub to host the codebase, since I've used that for years and it was th
 | Custom favicon.ico | 1 |
 | not-found pages for updating columns and todos | 1 |
 | Profile page | 1 |
-| *Total* | 38 |
+| *Total* | 37 |
 
 Extensive metadata means robots.ts and sitemap.ts files as well as metadata in app/layout.tsx file. 
 
