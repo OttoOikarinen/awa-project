@@ -24,13 +24,13 @@ export default async  function Home() {
           <div className="flex flex-1 justify-end gap-5">
             <Link
               href="/register"
-              className="px-4 py-2 border border-gray-500 text-gray-900 rounded-lg hover:bg-gray-100 transition"
+              className="rounded-md bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-blue-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
               >
               Register
             </Link>
             <Link
               href="/login"
-              className="px-4 py-2 border border-gray-500 text-gray-900 rounded-lg hover:bg-gray-100 transition"
+              className="rounded-md bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-blue-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
               >
               Login
             </Link>
