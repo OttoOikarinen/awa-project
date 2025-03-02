@@ -1,9 +1,7 @@
 import { fetchColumns, fetchTodoAmountForUser, getUser } from '@/app/lib/data'
 import { getUserFromCookie } from '@/app/lib/session'
-import { deleteUser } from '@/app/lib/actions'
-import { XMarkIcon } from '@heroicons/react/24/outline'
 
-export default async function Example() {
+export default async function Profile() {
 
     const email = await getUserFromCookie()
     const user = await getUser(email)
@@ -44,16 +42,6 @@ export default async function Example() {
           </div>
         </dl>
       </div>
-      <form
-        action={async () => {
-          'use server';
-          await deleteUser();
-        }}>
-          <button className="flex h-[48px] w-1/4 md:w-full items-center justify-center gap-2 rounded-md bg-red-300 p-3 text-sm font-medium hover:bg-red-500 hover:text-white md:flex-none md:justify-start md:p-2 md:px-3">
-            <XMarkIcon className="w-6" />
-            <div className="hidden md:block">Delete account</div>
-          </button>
-        </form>
     </div>
   )
 }
